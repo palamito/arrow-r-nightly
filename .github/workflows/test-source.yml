@@ -23,4 +23,5 @@ jobs:
         env:
           # Test source build so be sure not to download a binary
           LIBARROW_BINARY: "FALSE"
+          ARROW_R_DEV: "true"
         run: Rscript linux/install-arrow.R
