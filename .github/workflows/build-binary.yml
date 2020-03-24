@@ -13,52 +13,52 @@ on:
   # On tag too?
 
 jobs:
-  linux:
-    name: C++ Binary ${{ matrix.config.os }}-${{ matrix.config.version }}
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        config:
-        - { os: ubuntu, version: '16.04'}
-        - { os: ubuntu, version: '18.04'}
-        - { os: debian, version: '9'}
-        - { os: debian, version: '10'}
-        - { os: centos, version: '7'}
-        - { os: centos, version: '8'}
-    env:
-      VERSION: ${{ matrix.config.version }}
-    steps:
-      - name: Checkout arrow-r-nightly
-        uses: actions/checkout@v2
-      - name: Clone apache/arrow and checkout at date
-        shell: bash
-        run: |
-          cd linux
-          git clone https://github.com/apache/arrow
-          cd arrow
-          git checkout `git rev-list -n 1 --before="00:00" master`
-      - name: Build
-        shell: bash
-        run: |
-          cd linux
-          docker-compose build ${{ matrix.config.os }}
-          docker-compose run ${{ matrix.config.os }}
-      - name: Bundle and upload
-        env:
-          BINTRAY_APIKEY: ${{ secrets.BINTRAY_APIKEY }}
-        shell: bash
-        run: |
-          cd linux/arrow/r
-          export DATE=$(date -d yesterday +%Y%m%d)
-          source ../../../up-date-description.sh
-          VERSION=$(grep ^Version DESCRIPTION | sed s/Version:\ //)
-          export PKG_FILE="arrow-${VERSION}.zip"
-          cd libarrow/dist
-          # These files were created by the docker user so we have to sudo to get them
-          sudo -E zip -r $PKG_FILE lib/*.a include/
-          export REPO_PATH=/libarrow/bin/${{ matrix.config.os }}-${{ matrix.config.version }}
-          sudo -E bash ../../../../../bintray-upload.sh
+  # linux:
+  #   name: C++ Binary ${{ matrix.config.os }}-${{ matrix.config.version }}
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       config:
+  #       - { os: ubuntu, version: '16.04'}
+  #       - { os: ubuntu, version: '18.04'}
+  #       - { os: debian, version: '9'}
+  #       - { os: debian, version: '10'}
+  #       - { os: centos, version: '7'}
+  #       - { os: centos, version: '8'}
+  #   env:
+  #     VERSION: ${{ matrix.config.version }}
+  #   steps:
+  #     - name: Checkout arrow-r-nightly
+  #       uses: actions/checkout@v2
+  #     - name: Clone apache/arrow and checkout at date
+  #       shell: bash
+  #       run: |
+  #         cd linux
+  #         git clone https://github.com/apache/arrow
+  #         cd arrow
+  #         git checkout `git rev-list -n 1 --before="00:00" master`
+  #     - name: Build
+  #       shell: bash
+  #       run: |
+  #         cd linux
+  #         docker-compose build ${{ matrix.config.os }}
+  #         docker-compose run ${{ matrix.config.os }}
+  #     - name: Bundle and upload
+  #       env:
+  #         BINTRAY_APIKEY: ${{ secrets.BINTRAY_APIKEY }}
+  #       shell: bash
+  #       run: |
+  #         cd linux/arrow/r
+  #         export DATE=$(date -d yesterday +%Y%m%d)
+  #         source ../../../up-date-description.sh
+  #         VERSION=$(grep ^Version DESCRIPTION | sed s/Version:\ //)
+  #         export PKG_FILE="arrow-${VERSION}.zip"
+  #         cd libarrow/dist
+  #         # These files were created by the docker user so we have to sudo to get them
+  #         sudo -E zip -r $PKG_FILE lib/*.a include/
+  #         export REPO_PATH=/libarrow/bin/${{ matrix.config.os }}-${{ matrix.config.version }}
+  #         sudo -E bash ../../../../../bintray-upload.sh
   windows:
     name: C++ Binary Windows RTools ${{ matrix.rtools }}
     runs-on: windows-latest
@@ -77,11 +77,11 @@ jobs:
       - name: Clone apache/arrow and checkout at date
         shell: bash
         run: |
-          git clone https://github.com/apache/arrow
+          git clone https://github.com/wesm/arrow
           cd arrow
-          git checkout `git rev-list -n 1 --before="00:00" master`
+          git checkout ARROW-7979
           cd r
-          export DATE=$(date -d yesterday +%Y%m%d)
+          export DATE=666666
           source ../../up-date-description.sh
       - uses: r-lib/actions/setup-r@master
         with:
