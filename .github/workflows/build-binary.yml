@@ -81,10 +81,10 @@ jobs:
           cd arrow
           # git checkout `git rev-list -n 1 --before="00:00" master`
           cd r
-          export DATE=666666
+          export DATE=666667
           source ../../up-date-description.sh
           cd ../ci/scripts
-          sed -i.bak -e 's/"release"/"DEBUG"/' PKGBUILD
+          sed -i.bak -e 's/"release"/"release" -DARROW_CXXFLAGS="-g"/' PKGBUILD
       - uses: r-lib/actions/setup-r@master
         with:
           rtools-version: ${{ matrix.rtools }}
