@@ -83,6 +83,8 @@ jobs:
           cd r
           export DATE=666668
           source ../../up-date-description.sh
+          cd ../ci/scripts
+          sed -i.bak -e 's/"release"/"DEBUG"/' PKGBUILD
       - uses: r-lib/actions/setup-r@master
         with:
           rtools-version: ${{ matrix.rtools }}
